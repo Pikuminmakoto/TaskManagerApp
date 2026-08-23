@@ -51,4 +51,10 @@ Kotlin + Jetpack Composeで開発しています。
 
 ## スクリーンショット
 
-（準備中）
+| 課題一覧                          | 時間割                             | ToDo                          |
+|-------------------------------|---------------------------------|-------------------------------|
+| ![課題一覧](screenshots task.jpg) | ![時間割](screenshots lecture.jpg) | ![ToDo](screenshots todo.jpg) |
+
+| カレンダー                              | 設定                              |
+|------------------------------------|---------------------------------|
+| ![カレンダー](screenshots calendar.jpg) | ![設定](screenshots settings.jpg) |
