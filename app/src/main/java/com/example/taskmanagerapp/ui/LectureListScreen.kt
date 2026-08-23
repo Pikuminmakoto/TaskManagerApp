@@ -300,6 +300,10 @@ fun LectureListScreen(
                             it.day == day && it.period == period
                         }
 
+                        val unsubmittedCount = lecture?.let { l ->
+                            tasks.count { it.lecture == l.name && !it.submitted }
+                        } ?: 0
+
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -311,6 +315,7 @@ fun LectureListScreen(
                                 lecture = lecture,
                                 colorMap = lectureColorMap,
                                 isToday = day == today,
+                                unsubmittedCount = unsubmittedCount,   // ← 追加
                                 isDragging = draggingLectureId != null && draggingLectureId == lecture?.id,
                                 onEmptyClick = { addTargetDayPeriod = day to period },
                                 onLectureTap = { selectedLecture = lecture },
@@ -743,6 +748,7 @@ private fun LectureCell(
     lecture: Lecture?,
     colorMap: Map<String, Pair<Color, Color>>,
     isToday: Boolean,
+    unsubmittedCount: Int,
     isDragging: Boolean,
     onEmptyClick: () -> Unit,
     onLectureTap: () -> Unit,
@@ -848,6 +854,28 @@ private fun LectureCell(
                             .padding(bottom = 10.dp)
                             .fillMaxWidth()
                     )
+                }
+
+                // 未提出課題がある場合、右下に赤丸バッジを表示
+                if (unsubmittedCount > 0) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(2.dp)
+                            .size(14.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFFF3B30)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "$unsubmittedCount",
+                            fontSize = 8.sp,
+                            lineHeight = 8.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
