@@ -25,6 +25,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.icons.filled.HelpOutline
 import kotlinx.coroutines.launch
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.widget.Toast
+import com.example.taskmanagerapp.ui.TaskWidgetReceiver
 
 private fun tabLabel(id: String): String = when (id) {
     "task" -> "課題"
@@ -468,7 +472,41 @@ fun SettingsScreen(
                     )
                 }
             }
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+                Text("ホーム画面ウィジェット", style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(8.dp))
 
+                Text(
+                    "今日の講義件数や未提出課題をホーム画面で確認できるウィジェットを追加できます。",
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                val widgetContext = LocalContext.current
+
+                Button(
+                    onClick = {
+                        val appWidgetManager = widgetContext.getSystemService(AppWidgetManager::class.java)
+                        val provider = ComponentName(widgetContext, TaskWidgetReceiver::class.java)
+
+                        if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
+                            appWidgetManager.requestPinAppWidget(provider, null, null)
+                        } else {
+                            Toast.makeText(
+                                widgetContext,
+                                "この端末では自動追加に対応していません。ホーム画面の長押し→ウィジェットから手動で追加してください。",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("ウィジェットをホーム画面に追加")
+                }
+            }
             item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
